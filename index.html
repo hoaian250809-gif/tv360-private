@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV360 Private - Kho Phim Riêng Tư & Bảo Mật</title>
-    <!-- Tailwind CSS -->
+    <title>TV360 Private - Xem Phim Cá Nhân</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,149 +12,284 @@
             theme: {
                 extend: {
                     colors: {
-                        tvred: '#e50914',
-                        tvdark: '#0b0b0e',
-                        tvcard: '#18181c',
-                        tvborder: '#2a2a32'
+                        tvred: '#E50914',
+                        tvdark: '#141414',
+                        tvcard: '#1f1f1f'
                     }
                 }
             }
         }
     </script>
-    <!-- Font Inter & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0b0b0e; color: #f3f4f6; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .movie-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .movie-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 15px 30px -10px rgba(229, 9, 20, 0.4); z-index: 20; }
-        .glass-panel { background: rgba(24, 24, 28, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    </style>
 </head>
-<body class="bg-[#0b0b0e] min-h-screen text-white overflow-x-hidden">
+<body class="bg-tvdark text-white font-sans antialiased min-h-screen flex flex-col selection:bg-tvred selection:text-white">
 
-    <!-- HEADER / NAVIGATION -->
-    <header id="mainHeader" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 bg-gradient-to-b from-black/95 via-black/60 to-transparent backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            
-            <!-- Logo & Nav Links -->
-            <div class="flex items-center space-x-8">
-                <a href="#" onclick="filterCategory('all')" class="flex items-center space-x-2 group">
-                    <div class="bg-red-600 text-white font-black text-2xl px-3.5 py-1 rounded-xl tracking-wider shadow-lg shadow-red-600/40 group-hover:bg-red-700 transition">TV360</div>
-                    <span class="text-[10px] uppercase bg-red-950/80 text-red-400 border border-red-800/50 px-2 py-0.5 rounded-md font-bold tracking-widest hidden sm:inline-block">Admin Private</span>
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-50 bg-tvdark/95 backdrop-blur-md border-b border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+                <a href="#" class="flex items-center space-x-2">
+                    <span class="bg-tvred text-white font-black text-xl px-2.5 py-1 rounded tracking-wider shadow-lg shadow-red-600/30">TV360</span>
+                    <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold hidden sm:inline">Private</span>
                 </a>
-
-                <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-300">
-                    <button onclick="filterCategory('all')" class="nav-item text-white hover:text-red-500 transition py-1">Trang chủ</button>
-                    <button onclick="filterCategory('moi')" class="nav-item hover:text-red-500 transition py-1">Phim mới</button>
-                    <button onclick="filterCategory('le')" class="nav-item hover:text-red-500 transition py-1">Phim lẻ</button>
-                    <button onclick="filterCategory('bo')" class="nav-item hover:text-red-500 transition py-1">Phim bộ</button>
-                    <button onclick="filterCategory('trungquoc')" class="nav-item hover:text-red-500 transition py-1">Trung Quốc</button>
-                    <button onclick="filterCategory('anime')" class="nav-item hover:text-red-500 transition py-1">Anime</button>
+                <nav class="hidden md:flex space-x-1 text-sm font-medium">
+                    <button onclick="filterCategory('all')" class="nav-btn px-3 py-2 rounded-md transition text-white bg-neutral-800" data-cat="all">Tất cả</button>
+                    <button onclick="filterCategory('Mới cập nhật')" class="nav-btn px-3 py-2 rounded-md transition text-neutral-300 hover:text-white hover:bg-neutral-800" data-cat="Mới cập nhật">Mới cập nhật</button>
+                    <button onclick="filterCategory('Phim Lẻ')" class="nav-btn px-3 py-2 rounded-md transition text-neutral-300 hover:text-white hover:bg-neutral-800" data-cat="Phim Lẻ">Phim Lẻ</button>
+                    <button onclick="filterCategory('Phim Bộ')" class="nav-btn px-3 py-2 rounded-md transition text-neutral-300 hover:text-white hover:bg-neutral-800" data-cat="Phim Bộ">Phim Bộ</button>
+                    <button onclick="filterCategory('Trung Quốc')" class="nav-btn px-3 py-2 rounded-md transition text-neutral-300 hover:text-white hover:bg-neutral-800" data-cat="Trung Quốc">Trung Quốc</button>
+                    <button onclick="filterCategory('Anime')" class="nav-btn px-3 py-2 rounded-md transition text-neutral-300 hover:text-white hover:bg-neutral-800" data-cat="Anime">Anime</button>
                 </nav>
             </div>
 
-            <!-- Search, Category Select & Admin Auth Controls -->
-            <div class="flex items-center space-x-3 sm:space-x-4">
-                
-                <!-- Search Input -->
-                <div class="relative hidden sm:block">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                    </span>
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm phim cá nhân..." 
-                           class="bg-gray-900/80 border border-gray-700/80 text-xs sm:text-sm rounded-full pl-9 pr-4 py-2 w-40 lg:w-60 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition text-white placeholder-gray-500">
+            <div class="flex items-center space-x-3">
+                <div class="relative">
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Tìm kiếm phim..." class="bg-neutral-900 border border-neutral-700 text-sm rounded-full px-4 py-1.5 pl-9 focus:outline-none focus:border-tvred w-36 sm:w-64 transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-neutral-400 text-xs"></i>
                 </div>
-
-                <!-- Admin Status / Login Toggle Button -->
-                <div id="adminActionContainer">
-                    <!-- Rendered by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Nav Scrollbar -->
-        <div class="lg:hidden flex space-x-4 overflow-x-auto no-scrollbar px-4 py-2 border-t border-gray-800/50 bg-black/40 text-xs font-medium text-gray-300">
-            <button onclick="filterCategory('all')" class="whitespace-nowrap hover:text-red-500">Tất cả</button>
-            <button onclick="filterCategory('moi')" class="whitespace-nowrap hover:text-red-500">Mới cập nhật</button>
-            <button onclick="filterCategory('le')" class="whitespace-nowrap hover:text-red-500">Phim Lẻ</button>
-            <button onclick="filterCategory('bo')" class="whitespace-nowrap hover:text-red-500">Phim Bộ</button>
-            <button onclick="filterCategory('trungquoc')" class="whitespace-nowrap hover:text-red-500">Trung Quốc</button>
-            <button onclick="filterCategory('anime')" class="whitespace-nowrap hover:text-red-500">Anime</button>
-        </div>
-    </header>
-
-    <!-- MAIN CONTAINER -->
-    <main class="relative pb-24">
-        
-        <!-- HERO BANNER SECTION -->
-        <section id="heroBanner" class="relative h-[65vh] sm:h-[80vh] w-full flex items-center overflow-hidden">
-            <!-- Hero content injected via JS -->
-        </section>
-
-        <!-- SEARCH / FILTER RESULT HEADER -->
-        <div id="filterResultHeader" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 hidden">
-            <div class="flex items-center justify-between bg-gray-900/60 p-4 rounded-xl border border-gray-800">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-filter text-red-600 text-lg"></i>
-                    <h2 class="text-base sm:text-lg font-bold">
-                        Đang lọc: <span id="filterTitle" class="text-red-500">Tất cả phim</span>
-                    </h2>
-                </div>
-                <button onclick="filterCategory('all')" class="text-xs text-gray-400 hover:text-white underline">
-                    Đặt lại tất cả
+                <button onclick="openAdminLogin()" class="bg-tvred hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded-md transition shadow-md flex items-center space-x-1.5">
+                    <i class="fa-solid fa-lock text-[10px]"></i>
+                    <span id="adminBtnText">ADMIN</span>
                 </button>
             </div>
         </div>
-
-        <!-- MOVIE CATEGORIES ROWS -->
-        <div id="moviesContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-12">
-            <!-- Rows injected dynamically by JS -->
+        <!-- Mobile Category Bar -->
+        <div class="md:hidden flex overflow-x-auto px-4 py-2 space-x-2 border-t border-neutral-800 text-xs scrollbar-none">
+            <button onclick="filterCategory('all')" class="nav-btn-m px-3 py-1 rounded bg-neutral-800 text-white whitespace-nowrap" data-cat="all">Tất cả</button>
+            <button onclick="filterCategory('Mới cập nhật')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Mới cập nhật">Mới</button>
+            <button onclick="filterCategory('Phim Lẻ')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Phim Lẻ">Phim Lẻ</button>
+            <button onclick="filterCategory('Phim Bộ')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Phim Bộ">Phim Bộ</button>
+            <button onclick="filterCategory('Trung Quốc')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Trung Quốc">Trung Quốc</button>
+            <button onclick="filterCategory('Anime')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Anime">Anime</button>
         </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full space-y-8">
+        
+        <!-- HERO BANNER (Featured Movie) -->
+        <div id="heroSection" class="relative rounded-2xl overflow-hidden shadow-2xl bg-tvcard min-h-[360px] sm:min-h-[420px] flex items-end">
+            <div id="heroBg" class="absolute inset-0 bg-cover bg-center filter brightness-50 scale-105 transition duration-700" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-tvdark via-tvdark/40 to-transparent"></div>
+            <div class="relative p-6 sm:p-10 max-w-2xl space-y-3">
+                <span id="heroBadge" class="bg-tvred text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">Đề xuất</span>
+                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-md">Chào mừng đến với TV360 Cá Nhân</h1>
+                <p id="heroDesc" class="text-xs sm:text-sm text-neutral-300 line-clamp-2 leading-relaxed">Kho lưu trữ phim riêng tư của riêng bạn. Hãy đăng nhập Admin để thêm phim mới lên hệ thống!</p>
+                <div class="flex items-center space-x-3 pt-2">
+                    <button id="heroPlayBtn" onclick="playFirstMovie()" class="bg-white hover:bg-neutral-200 text-black font-bold px-5 py-2.5 rounded-lg flex items-center space-x-2 text-sm transition shadow-lg">
+                        <i class="fa-solid fa-play text-tvred"></i>
+                        <span>Xem Ngay</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOVIE LIST SECTION -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between border-b border-neutral-800 pb-2">
+                <h2 id="sectionTitle" class="text-lg sm:text-xl font-bold tracking-wide flex items-center space-x-2">
+                    <span class="w-1.5 h-5 bg-tvred rounded-full"></span>
+                    <span id="categoryHeading">Danh Sách Phim</span>
+                </h2>
+                <span id="movieCount" class="text-xs text-neutral-400">0 phim</span>
+            </div>
+
+            <!-- Grid Phim -->
+            <div id="movieGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Phim sẽ được render tự động bằng Javascript -->
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-black border-t border-gray-800/80 py-12">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center space-x-2 mb-4">
-                <span class="bg-red-600 text-white font-black text-xl px-3 py-1 rounded-lg">TV360</span>
-                <span class="text-xs text-gray-400 border border-gray-700 px-2 py-0.5 rounded">Hệ Thống Phim Cá Nhân</span>
-            </div>
-            <p class="text-xs sm:text-sm text-gray-500 max-w-md mx-auto mb-4">
-                Kho lưu trữ phim cá nhân riêng tư. Bảo mật nghiêm ngặt chỉ dành cho duy nhất Admin điều hành.
-            </p>
-            <p class="text-xs text-gray-600">&copy; 2026 TV360 Private Admin System. Mọi quyền được bảo lưu.</p>
-        </div>
+    <footer class="border-t border-neutral-800 bg-tvdark py-6 mt-12 text-center text-xs text-neutral-500">
+        <p>TV360 Private Video System &copy; 2026. Quản lý độc quyền bởi Admin.</p>
     </footer>
 
-    <!-- MODAL 1: ĐĂNG NHẬP ADMIN (AUTHENTICATION) -->
-    <div id="loginModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 sm:p-8 shadow-2xl relative border border-gray-700">
-            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg w-8 h-8 rounded-full bg-gray-800/60 flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            
-            <div class="text-center space-y-3 mb-6">
-                <div class="w-14 h-14 bg-red-600/20 border border-red-500/40 text-red-500 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-lg shadow-red-600/20">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <h3 class="text-xl font-extrabold text-white">Xác Thực Quản Trị Viên</h3>
-                <p class="text-xs text-gray-400">Nhập mật khẩu Admin để mở quyền Quản trị & Chỉnh sửa phim</p>
+    <!-- WATCH MODAL (Trình phát phim) -->
+    <div id="watchModal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
+        <div class="w-full max-w-5xl bg-tvcard rounded-xl overflow-hidden shadow-2xl border border-neutral-800 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between px-4 py-3 bg-neutral-900 border-b border-neutral-800">
+                <h3 id="modalTitle" class="font-bold text-sm sm:text-base text-white truncate">Tên Phim</h3>
+                <button onclick="closeWatchModal()" class="text-neutral-400 hover:text-white p-1.5 rounded-lg hover:bg-neutral-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+            <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+                <div id="playerContainer" class="w-full h-full"></div>
+            </div>
+            <div class="p-4 bg-neutral-900/50 space-y-1">
+                <p id="modalDesc" class="text-xs sm:text-sm text-neutral-300">Mô tả phim...</p>
+            </div>
+        </div>
+    </div>
 
-            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1.5">Mật khẩu Admin</label>
-                    <div class="relative">
-                        <input type="password" id="adminPasswordInput" required placeholder="Nhập mật khẩu..." 
-                               class="w-full bg-black/80 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 text-white pr-10">
-                        <button type="button" onclick="togglePasswordVisibility('adminPasswordInput')" class="absolute right-3 top-3.5 text-gray-500 hover:text-gray-300">
-                            <i class="fa-solid fa-eye text-xs"></i>
-                        </button>
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/80 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-tvcard w-full max-w-sm rounded-xl p-6 border border-neutral-800 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-tvred"></i>
+                    <span>Xác Thực Admin</span>
+                </h3>
+                <button onclick="closeAdminLogin()" class="text-neutral-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-neutral-400">Nhập mật khẩu quản trị để truy cập bảng điều khiển.</p>
+            <input type="password" id="adminPasswordInput" placeholder="Mật khẩu (mặc định: admin123)" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
+            <button onclick="verifyAdmin()" class="w-full bg-tvred hover:bg-red-700 text-white font-bold py-2 rounded-lg text-sm transition">Đăng Nhập</button>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
+        <div class="w-full max-w-4xl bg-tvcard rounded-xl overflow-hidden shadow-2xl border border-neutral-800 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between px-6 py-4 bg-neutral-900 border-b border-neutral-800">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-tvred"></i>
+                    <span>Bảng Điều Khiển Quản Trị (Admin Dashboard)</span>
+                </h3>
+                <button onclick="closeAdminDashboard()" class="text-neutral-400 hover:text-white p-1 rounded-lg hover:bg-neutral-800 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Form Thêm / Sửa Phim -->
+                <div class="bg-neutral-900 p-4 rounded-xl border border-neutral-800 space-y-4">
+                    <h4 id="formHeading" class="font-bold text-sm text-tvred uppercase tracking-wider">Thêm Phim Mới</h4>
+                    <input type="hidden" id="editMovieId">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="movieTitle" placeholder="Tên phim" class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
+                        <select id="movieCategory" class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
+                            <option value="Mới cập nhật">Mới cập nhật</option>
+                            <option value="Phim Lẻ">Phim Lẻ</option>
+                            <option value="Phim Bộ">Phim Bộ</option>
+                            <option value="Trung Quốc">Trung Quốc</option>
+                            <option value="Anime">Anime</option>
+                        </select>
                     </div>
-                    <p class="text-[11px] text-gray-500 mt-1.5 italic">* Mật khẩu mặc định ban đầu là: <span class="text-red-400 font-mono font-bold">admin123</span></p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="moviePoster" placeholder="Link ảnh Poster (URL hình ảnh)" class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
+                        <input type="text" id="movieVideoUrl" placeholder="Link Video (Youtube, Google Drive embed, MP4...)" class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
+                    </div>
+                    <textarea id="movieDesc" placeholder="Mô tả nội dung phim..." rows="2" class="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred"></textarea>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button onclick="saveMovie()" class="bg-tvred hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition">Lưu Phim</button>
+                        <button onclick="resetMovieForm()" class="bg-neutral-700 hover:bg-neutral-600 text-white font-bold px-4 py-2 rounded-lg text-xs transition">Hủy / Làm mới</button>
+                    </div>
                 </div>
 
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/30 transition transform active:scale-95 text-sm flex items-center justify-center s
+                <!-- Đổi Mật khẩu Admin -->
+                <div class="bg-neutral-900 p-4 rounded-xl border border-neutral-800 space-y-3">
+                    <h4 class="font-bold text-sm text-neutral-300 uppercase tracking-wider">Đổi Mật Khẩu Quản Trị</h4>
+                    <div class="flex items-center space-x-3 max-w-md">
+                        <input type="password" id="newAdminPass" placeholder="Mật khẩu mới" class="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred flex-grow">
+                        <button onclick="changePassword()" class="bg-neutral-700 hover:bg-neutral-600 text-white font-bold px-4 py-2 rounded-lg text-xs transition whitespace-nowrap">Đổi Mật Khẩu</button>
+                    </div>
+                </div>
+
+                <!-- Danh sách quản lý phim -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm text-neutral-300 uppercase tracking-wider">Danh Sách Phim Hiện Có</h4>
+                    <div id="adminMovieList" class="space-y-2">
+                        <!-- Render danh sách phim admin -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Khởi tạo dữ liệu mẫu nếu chưa có
+        let movies = JSON.parse(localStorage.getItem('tv360_movies')) || [];
+        let adminPass = localStorage.getItem('tv360_pass') || 'admin123';
+        let isAdminLoggedIn = false;
+        let currentFilter = 'all';
+
+        // Tự động mở admin nếu trên URL có #admin
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMovies();
+            if(window.location.hash === '#admin') {
+                openAdminLogin();
+            }
+        });
+
+        function saveToStorage() {
+            localStorage.setItem('tv360_movies', JSON.stringify(movies));
+        }
+
+        // Render danh sách phim ra trang chủ
+        function renderMovies(filter = 'all', searchQuery = '') {
+            const grid = document.getElementById('movieGrid');
+            const countEl = document.getElementById('movieCount');
+            grid.innerHTML = '';
+
+            let filtered = movies.filter(m => {
+                let matchCat = (filter === 'all' || m.category === filter);
+                let matchSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            countEl.innerText = filtered.length + ' phim';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 text-sm">Chưa có bộ phim nào trong danh mục này.</div>`;
+                return;
+            }
+
+            // Cập nhật Hero Banner với phim đầu tiên
+            if(movies.length > 0 && filter === 'all' && !searchQuery) {
+                let hero = movies[0];
+                document.getElementById('heroTitle').innerText = hero.title;
+                document.getElementById('heroDesc').innerText = hero.description || 'Không có mô tả.';
+                document.getElementById('heroBg').style.backgroundImage = `url('${hero.poster}')`;
+            }
+
+            filtered.forEach(movie => {
+                let card = document.createElement('div');
+                card.className = 'group relative bg-tvcard rounded-xl overflow-hidden shadow-lg border border-neutral-800 hover:border-tvred transition duration-300 flex flex-col cursor-pointer';
+                card.onclick = () => openWatchModal(movie.id);
+
+                card.innerHTML = `
+                    <div class="relative aspect-[2/3] w-full overflow-hidden bg-neutral-900">
+                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                            <span class="w-12 h-12 rounded-full bg-tvred text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition duration-300">
+                                <i class="fa-solid fa-play ml-0.5"></i>
+                            </span>
+                        </div>
+                        <span class="absolute top-2 left-2 bg-black/70 backdrop-blur-md text-[10px] font-bold px-2 py-0.5 rounded text-white">${movie.category}</span>
+                    </div>
+                    <div class="p-3 flex flex-col flex-grow justify-between">
+                        <h3 class="font-bold text-xs sm:text-sm text-white line-clamp-1 group-hover:text-tvred transition">${movie.title}</h3>
+                        <p class="text-[11px] text-neutral-400 line-clamp-1 mt-1">${movie.description || 'Xem phim trực tuyến'}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Lọc danh mục
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.cat === cat) {
+                    btn.classList.add('bg-neutral-800', 'text-white');
+                    btn.classList.remove('text-neutral-300');
+                } else {
+                    btn.classList.remove('bg-neutral-800', 'text-white');
+                    btn.classList.add('text-neutral-300');
+                }
+            });
+            document.querySelectorAll('.nav-btn-m').forEach(btn => {
+                if(btn.dataset.cat === cat) {
+                    btn.classList.add('bg-neutral-800', 'text-white');
+                    btn.classList.remove('bg-neutral-900', 'text-neutral-300');
+                } else {
+                    btn.classList.remove('bg-neutral-800', 'text-white');
+                    btn.classList.add('bg-neutral-900', 'text-neutral-300');
+                }
+            });
+            document.getElementById('categoryHeading').innerText = cat === 'all' ? 'Danh Sách Phim' : cat;
+            renderMovies(cat, document.getElementB
