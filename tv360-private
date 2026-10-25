@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV360 Private - Kho Phim Riêng Tư & Bảo Mật</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tvred: '#e50914',
+                        tvdark: '#0b0b0e',
+                        tvcard: '#18181c',
+                        tvborder: '#2a2a32'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0b0e; color: #f3f4f6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .movie-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .movie-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 15px 30px -10px rgba(229, 9, 20, 0.4); z-index: 20; }
+        .glass-panel { background: rgba(24, 24, 28, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="bg-[#0b0b0e] min-h-screen text-white overflow-x-hidden">
+
+    <!-- HEADER / NAVIGATION -->
+    <header id="mainHeader" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 bg-gradient-to-b from-black/95 via-black/60 to-transparent backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo & Nav Links -->
+            <div class="flex items-center space-x-8">
+                <a href="#" onclick="filterCategory('all')" class="flex items-center space-x-2 group">
+                    <div class="bg-red-600 text-white font-black text-2xl px-3.5 py-1 rounded-xl tracking-wider shadow-lg shadow-red-600/40 group-hover:bg-red-700 transition">TV360</div>
+                    <span class="text-[10px] uppercase bg-red-950/80 text-red-400 border border-red-800/50 px-2 py-0.5 rounded-md font-bold tracking-widest hidden sm:inline-block">Admin Private</span>
+                </a>
+
+                <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-300">
+                    <button onclick="filterCategory('all')" class="nav-item text-white hover:text-red-500 transition py-1">Trang chủ</button>
+                    <button onclick="filterCategory('moi')" class="nav-item hover:text-red-500 transition py-1">Phim mới</button>
+                    <button onclick="filterCategory('le')" class="nav-item hover:text-red-500 transition py-1">Phim lẻ</button>
+                    <button onclick="filterCategory('bo')" class="nav-item hover:text-red-500 transition py-1">Phim bộ</button>
+                    <button onclick="filterCategory('trungquoc')" class="nav-item hover:text-red-500 transition py-1">Trung Quốc</button>
+                    <button onclick="filterCategory('anime')" class="nav-item hover:text-red-500 transition py-1">Anime</button>
+                </nav>
+            </div>
+
+            <!-- Search, Category Select & Admin Auth Controls -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                
+                <!-- Search Input -->
+                <div class="relative hidden sm:block">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm phim cá nhân..." 
+                           class="bg-gray-900/80 border border-gray-700/80 text-xs sm:text-sm rounded-full pl-9 pr-4 py-2 w-40 lg:w-60 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition text-white placeholder-gray-500">
+                </div>
+
+                <!-- Admin Status / Login Toggle Button -->
+                <div id="adminActionContainer">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Scrollbar -->
+        <div class="lg:hidden flex space-x-4 overflow-x-auto no-scrollbar px-4 py-2 border-t border-gray-800/50 bg-black/40 text-xs font-medium text-gray-300">
+            <button onclick="filterCategory('all')" class="whitespace-nowrap hover:text-red-500">Tất cả</button>
+            <button onclick="filterCategory('moi')" class="whitespace-nowrap hover:text-red-500">Mới cập nhật</button>
+            <button onclick="filterCategory('le')" class="whitespace-nowrap hover:text-red-500">Phim Lẻ</button>
+            <button onclick="filterCategory('bo')" class="whitespace-nowrap hover:text-red-500">Phim Bộ</button>
+            <button onclick="filterCategory('trungquoc')" class="whitespace-nowrap hover:text-red-500">Trung Quốc</button>
+            <button onclick="filterCategory('anime')" class="whitespace-nowrap hover:text-red-500">Anime</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="relative pb-24">
+        
+        <!-- HERO BANNER SECTION -->
+        <section id="heroBanner" class="relative h-[65vh] sm:h-[80vh] w-full flex items-center overflow-hidden">
+            <!-- Hero content injected via JS -->
+        </section>
+
+        <!-- SEARCH / FILTER RESULT HEADER -->
+        <div id="filterResultHeader" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 hidden">
+            <div class="flex items-center justify-between bg-gray-900/60 p-4 rounded-xl border border-gray-800">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-filter text-red-600 text-lg"></i>
+                    <h2 class="text-base sm:text-lg font-bold">
+                        Đang lọc: <span id="filterTitle" class="text-red-500">Tất cả phim</span>
+                    </h2>
+                </div>
+                <button onclick="filterCategory('all')" class="text-xs text-gray-400 hover:text-white underline">
+                    Đặt lại tất cả
+                </button>
+            </div>
+        </div>
+
+        <!-- MOVIE CATEGORIES ROWS -->
+        <div id="moviesContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-12">
+            <!-- Rows injected dynamically by JS -->
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-gray-800/80 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <span class="bg-red-600 text-white font-black text-xl px-3 py-1 rounded-lg">TV360</span>
+                <span class="text-xs text-gray-400 border border-gray-700 px-2 py-0.5 rounded">Hệ Thống Phim Cá Nhân</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-500 max-w-md mx-auto mb-4">
+                Kho lưu trữ phim cá nhân riêng tư. Bảo mật nghiêm ngặt chỉ dành cho duy nhất Admin điều hành.
+            </p>
+            <p class="text-xs text-gray-600">&copy; 2026 TV360 Private Admin System. Mọi quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: ĐĂNG NHẬP ADMIN (AUTHENTICATION) -->
+    <div id="loginModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 sm:p-8 shadow-2xl relative border border-gray-700">
+            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg w-8 h-8 rounded-full bg-gray-800/60 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center space-y-3 mb-6">
+                <div class="w-14 h-14 bg-red-600/20 border border-red-500/40 text-red-500 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-lg shadow-red-600/20">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-white">Xác Thực Quản Trị Viên</h3>
+                <p class="text-xs text-gray-400">Nhập mật khẩu Admin để mở quyền Quản trị & Chỉnh sửa phim</p>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1.5">Mật khẩu Admin</label>
+                    <div class="relative">
+                        <input type="password" id="adminPasswordInput" required placeholder="Nhập mật khẩu..." 
+                               class="w-full bg-black/80 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 text-white pr-10">
+                        <button type="button" onclick="togglePasswordVisibility('adminPasswordInput')" class="absolute right-3 top-3.5 text-gray-500 hover:text-gray-300">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1.5 italic">* Mật khẩu mặc định ban đầu là: <span class="text-red-400 font-mono font-bold">admin123</span></p>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-red-600/30 transition transform active:scale-95 text-sm flex items-center justify-center s
