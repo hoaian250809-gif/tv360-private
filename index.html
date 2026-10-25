@@ -2,8 +2,8 @@
 <html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV360 Private - Xem Phim Cá Nhân</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TV360 Private - Siêu Phẩm Giải Trí Cá Nhân</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,8 +13,8 @@
                 extend: {
                     colors: {
                         tvred: '#E50914',
-                        tvdark: '#141414',
-                        tvcard: '#1f1f1f'
+                        tvdark: '#0f0f0f',
+                        tvcard: '#1a1a1a'
                     }
                 }
             }
@@ -22,16 +22,23 @@
     </script>
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Tối ưu hóa cuộn mượt và chống lỗi tràn màn hình trên di động */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #E50914; }
+    </style>
 </head>
 <body class="bg-tvdark text-white font-sans antialiased min-h-screen flex flex-col selection:bg-tvred selection:text-white">
 
     <!-- HEADER / NAVBAR -->
-    <header class="sticky top-0 z-50 bg-tvdark/95 backdrop-blur-md border-b border-neutral-800">
+    <header class="sticky top-0 z-50 bg-tvdark/95 backdrop-blur-md border-b border-neutral-800/80 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-6">
-                <a href="#" class="flex items-center space-x-2">
-                    <span class="bg-tvred text-white font-black text-xl px-2.5 py-1 rounded tracking-wider shadow-lg shadow-red-600/30">TV360</span>
-                    <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold hidden sm:inline">Private</span>
+                <a href="#" class="flex items-center space-x-2 group">
+                    <span class="bg-tvred text-white font-black text-xl px-2.5 py-1 rounded tracking-wider shadow-lg shadow-red-600/40 group-hover:scale-105 transition">TV360</span>
+                    <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold hidden sm:inline">Private Cinema</span>
                 </a>
                 <nav class="hidden md:flex space-x-1 text-sm font-medium">
                     <button onclick="filterCategory('all')" class="nav-btn px-3 py-2 rounded-md transition text-white bg-neutral-800" data-cat="all">Tất cả</button>
@@ -45,39 +52,40 @@
 
             <div class="flex items-center space-x-3">
                 <div class="relative">
-                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Tìm kiếm phim..." class="bg-neutral-900 border border-neutral-700 text-sm rounded-full px-4 py-1.5 pl-9 focus:outline-none focus:border-tvred w-36 sm:w-64 transition">
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Tìm kiếm phim..." class="bg-neutral-900 border border-neutral-700 text-sm rounded-full px-4 py-1.5 pl-9 focus:outline-none focus:border-tvred w-32 sm:w-60 transition text-white">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-neutral-400 text-xs"></i>
                 </div>
-                <button onclick="openAdminLogin()" class="bg-tvred hover:bg-red-700 text-white text-xs font-bold px-3 py-2 rounded-md transition shadow-md flex items-center space-x-1.5">
+                <!-- Nút Admin được tối ưu chống kẹt cảm ứng trên điện thoại -->
+                <button type="button" onclick="openAdminModalDirect()" class="bg-tvred hover:bg-red-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition shadow-md flex items-center space-x-1.5 active:scale-95 cursor-pointer">
                     <i class="fa-solid fa-lock text-[10px]"></i>
                     <span id="adminBtnText">ADMIN</span>
                 </button>
             </div>
         </div>
         <!-- Mobile Category Bar -->
-        <div class="md:hidden flex overflow-x-auto px-4 py-2 space-x-2 border-t border-neutral-800 text-xs scrollbar-none">
-            <button onclick="filterCategory('all')" class="nav-btn-m px-3 py-1 rounded bg-neutral-800 text-white whitespace-nowrap" data-cat="all">Tất cả</button>
-            <button onclick="filterCategory('Mới cập nhật')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Mới cập nhật">Mới</button>
-            <button onclick="filterCategory('Phim Lẻ')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Phim Lẻ">Phim Lẻ</button>
-            <button onclick="filterCategory('Phim Bộ')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Phim Bộ">Phim Bộ</button>
-            <button onclick="filterCategory('Trung Quốc')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Trung Quốc">Trung Quốc</button>
-            <button onclick="filterCategory('Anime')" class="nav-btn-m px-3 py-1 rounded bg-neutral-900 text-neutral-300 whitespace-nowrap" data-cat="Anime">Anime</button>
+        <div class="md:hidden flex overflow-x-auto px-4 py-2 space-x-2 border-t border-neutral-800/60 text-xs scrollbar-none">
+            <button onclick="filterCategory('all')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-800 text-white whitespace-nowrap font-medium" data-cat="all">Tất cả</button>
+            <button onclick="filterCategory('Mới cập nhật')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-900 text-neutral-300 whitespace-nowrap font-medium" data-cat="Mới cập nhật">Mới</button>
+            <button onclick="filterCategory('Phim Lẻ')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-900 text-neutral-300 whitespace-nowrap font-medium" data-cat="Phim Lẻ">Phim Lẻ</button>
+            <button onclick="filterCategory('Phim Bộ')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-900 text-neutral-300 whitespace-nowrap font-medium" data-cat="Phim Bộ">Phim Bộ</button>
+            <button onclick="filterCategory('Trung Quốc')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-900 text-neutral-300 whitespace-nowrap font-medium" data-cat="Trung Quốc">Trung Quốc</button>
+            <button onclick="filterCategory('Anime')" class="nav-btn-m px-3 py-1.5 rounded-lg bg-neutral-900 text-neutral-300 whitespace-nowrap font-medium" data-cat="Anime">Anime</button>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full space-y-8">
         
-        <!-- HERO BANNER (Featured Movie) -->
-        <div id="heroSection" class="relative rounded-2xl overflow-hidden shadow-2xl bg-tvcard min-h-[360px] sm:min-h-[420px] flex items-end">
-            <div id="heroBg" class="absolute inset-0 bg-cover bg-center filter brightness-50 scale-105 transition duration-700" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80')"></div>
+        <!-- HERO BANNER -->
+        <div id="heroSection" class="relative rounded-2xl overflow-hidden shadow-2xl bg-tvcard min-h-[380px] sm:min-h-[440px] flex items-end border border-neutral-800/50">
+            <div id="heroBg" class="absolute inset-0 bg-cover bg-center filter brightness-[0.45] scale-105 transition duration-700" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80')"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-tvdark via-tvdark/40 to-transparent"></div>
             <div class="relative p-6 sm:p-10 max-w-2xl space-y-3">
-                <span id="heroBadge" class="bg-tvred text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">Đề xuất</span>
-                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-md">Chào mừng đến với TV360 Cá Nhân</h1>
-                <p id="heroDesc" class="text-xs sm:text-sm text-neutral-300 line-clamp-2 leading-relaxed">Kho lưu trữ phim riêng tư của riêng bạn. Hãy đăng nhập Admin để thêm phim mới lên hệ thống!</p>
+                <span id="heroBadge" class="bg-tvred text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider shadow">Đề Xuất Hot</span>
+                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-lg">Kho Phim TV360 Cá Nhân</h1>
+                <p id="heroDesc" class="text-xs sm:text-sm text-neutral-300 line-clamp-2 leading-relaxed">Không gian giải trí đỉnh cao của riêng bạn. Bấm nút Quản trị Admin ở góc trên để thêm bộ phim yêu thích ngay lập tức!</p>
                 <div class="flex items-center space-x-3 pt-2">
-                    <button id="heroPlayBtn" onclick="playFirstMovie()" class="bg-white hover:bg-neutral-200 text-black font-bold px-5 py-2.5 rounded-lg flex items-center space-x-2 text-sm transition shadow-lg">
+                    <button onclick="playFirstMovie()" class="bg-white hover:bg-neutral-200 text-black font-bold px-5 py-2.5 rounded-xl flex items-center space-x-2 text-sm transition shadow-lg active:scale-95">
                         <i class="fa-solid fa-play text-tvred"></i>
                         <span>Xem Ngay</span>
                     </button>
@@ -88,29 +96,29 @@
         <!-- MOVIE LIST SECTION -->
         <section class="space-y-4">
             <div class="flex items-center justify-between border-b border-neutral-800 pb-2">
-                <h2 id="sectionTitle" class="text-lg sm:text-xl font-bold tracking-wide flex items-center space-x-2">
+                <h2 class="text-lg sm:text-xl font-bold tracking-wide flex items-center space-x-2">
                     <span class="w-1.5 h-5 bg-tvred rounded-full"></span>
                     <span id="categoryHeading">Danh Sách Phim</span>
                 </h2>
-                <span id="movieCount" class="text-xs text-neutral-400">0 phim</span>
+                <span id="movieCount" class="text-xs text-neutral-400 font-medium">0 phim</span>
             </div>
 
             <!-- Grid Phim -->
             <div id="movieGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-                <!-- Phim sẽ được render tự động bằng Javascript -->
+                <!-- Phim render tự động -->
             </div>
         </section>
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-neutral-800 bg-tvdark py-6 mt-12 text-center text-xs text-neutral-500">
-        <p>TV360 Private Video System &copy; 2026. Quản lý độc quyền bởi Admin.</p>
+    <footer class="border-t border-neutral-800/80 bg-tvdark py-6 mt-12 text-center text-xs text-neutral-500">
+        <p>TV360 Private System &copy; 2026. Designed exclusively for Admin.</p>
     </footer>
 
     <!-- WATCH MODAL (Trình phát phim) -->
-    <div id="watchModal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
-        <div class="w-full max-w-5xl bg-tvcard rounded-xl overflow-hidden shadow-2xl border border-neutral-800 flex flex-col max-h-[90vh]">
-            <div class="flex items-center justify-between px-4 py-3 bg-neutral-900 border-b border-neutral-800">
+    <div id="watchModal" class="fixed inset-0 z-50 bg-black/95 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
+        <div class="w-full max-w-5xl bg-tvcard rounded-2xl overflow-hidden shadow-2xl border border-neutral-800 flex flex-col max-h-[92vh]">
+            <div class="flex items-center justify-between px-4 py-3.5 bg-neutral-900 border-b border-neutral-800">
                 <h3 id="modalTitle" class="font-bold text-sm sm:text-base text-white truncate">Tên Phim</h3>
                 <button onclick="closeWatchModal()" class="text-neutral-400 hover:text-white p-1.5 rounded-lg hover:bg-neutral-800 transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
@@ -119,25 +127,164 @@
             <div class="relative w-full aspect-video bg-black flex items-center justify-center">
                 <div id="playerContainer" class="w-full h-full"></div>
             </div>
-            <div class="p-4 bg-neutral-900/50 space-y-1">
+            <div class="p-4 bg-neutral-900/60 space-y-1">
                 <p id="modalDesc" class="text-xs sm:text-sm text-neutral-300">Mô tả phim...</p>
             </div>
         </div>
     </div>
 
     <!-- ADMIN LOGIN MODAL -->
-    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/80 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-tvcard w-full max-w-sm rounded-xl p-6 border border-neutral-800 shadow-2xl space-y-4">
+    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/85 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-tvcard w-full max-w-sm rounded-2xl p-6 border border-neutral-800 shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-base text-white flex items-center space-x-2">
                     <i class="fa-solid fa-shield-halved text-tvred"></i>
                     <span>Xác Thực Admin</span>
                 </h3>
-                <button onclick="closeAdminLogin()" class="text-neutral-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeAdminLogin()" class="text-neutral-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <p class="text-xs text-neutral-400">Nhập mật khẩu quản trị để truy cập bảng điều khiển.</p>
-            <input type="password" id="adminPasswordInput" placeholder="Mật khẩu (mặc định: admin123)" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-tvred">
-            <button onclick="verifyAdmin()" class="w-full bg-tvred hover:bg-red-700 text-white font-bold py-2 rounded-lg text-sm transition">Đăng Nhập</button>
+            <p class="text-xs text-neutral-400">Nhập mật khẩu quản trị để vào bảng điều khiển (mặc định: <strong class="text-white">admin123</strong>).</p>
+            <input type="password" id="adminPasswordInput" placeholder="Mật khẩu Admin" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-tvred">
+            <button onclick="verifyAdmin()" class="w-full bg-tvred hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-lg active:scale-95">Đăng Nhập</button>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-50 bg-black/95 hidden flex flex-col justify-center items-center p-2 sm:p-6 backdrop-blur-md">
+        <div class="w-full max-w-4xl bg-tvcard rounded-2xl overflow-hidden shadow-2xl border border-neutral-800 flex flex-col max-h-[92vh]">
+            <div class="flex items-center justify-between px-6 py-4 bg-neutral-900 border-b border-neutral-800">
+                <h3 class="font-bold text-base text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-tvred"></i>
+                    <span>Bảng Quản Trị Hệ Thống (Admin Dashboard)</span>
+                </h3>
+                <button onclick="closeAdminDashboard()" class="text-neutral-400 hover:text-white p-1.5 rounded-lg hover:bg-neutral-800 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Form Thêm / Sửa Phim -->
+                <div class="bg-neutral-900 p-4 sm:p-5 rounded-xl border border-neutral-800 space-y-4">
+                    <h4 id="formHeading" class="font-bold text-xs text-tvred uppercase tracking-wider">Thêm Phim Mới Vào Kho</h4>
+                    <input type="hidden" id="editMovieId">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="movieTitle" placeholder="Tên bộ phim" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred">
+                        <select id="movieCategory" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred">
+                            <option value="Mới cập nhật">Mới cập nhật</option>
+                            <option value="Phim Lẻ">Phim Lẻ</option>
+                            <option value="Phim Bộ">Phim Bộ</option>
+                            <option value="Trung Quốc">Trung Quốc</option>
+                            <option value="Anime">Anime</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="moviePoster" placeholder="Link ảnh Poster (URL hình ảnh)" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred">
+                        <input type="text" id="movieVideoUrl" placeholder="Link Video (Youtube, Google Drive, MP4...)" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred">
+                    </div>
+                    <textarea id="movieDesc" placeholder="Mô tả nội dung phim..." rows="2" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred"></textarea>
+                    
+                    <div class="flex items-center space-x-3 pt-1">
+                        <button onclick="saveMovie()" class="bg-tvred hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow active:scale-95">Lưu Phim</button>
+                        <button onclick="resetMovieForm()" class="bg-neutral-700 hover:bg-neutral-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition">Làm mới form</button>
+                    </div>
+                </div>
+
+                <!-- Đổi Mật khẩu Admin -->
+                <div class="bg-neutral-900 p-4 sm:p-5 rounded-xl border border-neutral-800 space-y-3">
+                    <h4 class="font-bold text-xs text-neutral-300 uppercase tracking-wider">Đổi Mật Khẩu Quản Trị</h4>
+                    <div class="flex items-center space-x-3 max-w-md">
+                        <input type="password" id="newAdminPass" placeholder="Mật khẩu quản trị mới" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-tvred flex-grow">
+                        <button onclick="changePassword()" class="bg-neutral-700 hover:bg-neutral-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition whitespace-nowrap">Đổi Mật Khẩu</button>
+                    </div>
+                </div>
+
+                <!-- Danh sách quản lý phim -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-xs text-neutral-300 uppercase tracking-wider">Danh Sách Phim Đang Quản Lý</h4>
+                    <div id="adminMovieList" class="space-y-2">
+                        <!-- Render list admin -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Khởi tạo dữ liệu mẫu mặc định nếu chưa có phim nào
+        let defaultMovies = [
+            {
+                id: 1,
+                title: "Thế Giới Hoàn Mỹ (Mẫu)",
+                category: "Trung Quốc",
+                poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
+                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                description: "Bộ phim hoạt hình 3D tiên hiệp hấp dẫn với đồ họa đỉnh cao."
+            },
+            {
+                id: 2,
+                title: "Hành Trình Khám Phá Vũ Trụ",
+                category: "Phim Lẻ",
+                poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80",
+                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                description: "Chuyến phiêu lưu kỳ thú ngoài không gian sâu thẳm."
+            }
+        ];
+
+        let movies = JSON.parse(localStorage.getItem('tv360_movies')) || defaultMovies;
+        let adminPass = localStorage.getItem('tv360_pass') || 'admin123';
+        let isAdminLoggedIn = false;
+        let currentFilter = 'all';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMovies();
+            // Tự động mở bảng login nếu URL có #admin
+            if(window.location.hash === '#admin') {
+                setTimeout(() => openAdminModalDirect(), 300);
+            }
+        });
+
+        function saveToStorage() {
+            localStorage.setItem('tv360_movies', JSON.stringify(movies));
+        }
+
+        function renderMovies(filter = 'all', searchQuery = '') {
+            const grid = document.getElementById('movieGrid');
+            const countEl = document.getElementById('movieCount');
+            grid.innerHTML = '';
+
+            let filtered = movies.filter(m => {
+                let matchCat = (filter === 'all' || m.category === filter);
+                let matchSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            countEl.innerText = filtered.length + ' phim';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-neutral-500 text-sm">Chưa có bộ phim nào trong danh mục này. Hãy vào Admin để thêm phim mới!</div>`;
+                return;
+            }
+
+            if(movies.length > 0 && filter === 'all' && !searchQuery) {
+                let hero = movies[0];
+                document.getElementById('heroTitle').innerText = hero.title;
+                document.getElementById('heroDesc').innerText = hero.description || 'Không có mô tả.';
+                document.getElementById('heroBg').style.backgroundImage = `url('${hero.poster}')`;
+            }
+
+            filtered.forEach(movie => {
+                let card = document.createElement('div');
+                card.className = 'group relative bg-tvcard rounded-xl overflow-hidden shadow-lg border border-neutral-800 hover:border-tvred transition duration-300 flex flex-col cursor-pointer';
+                card.onclick = () => openWatchModal(movie.id);
+
+                card.innerHTML = `
+                    <div class="relative aspect-[2/3] w-full overflow-hidden bg-neutral-900">
+                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80'">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                            <span class="w-12 h-12 rounded-full bg-tvred text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition duration-300">
+                                <i class="fa-solid fa-play ml-0.5"></i>
+                            </span>
+                        </div>
+                        <span class="absolute top-2 left-2 b            <button onclick="verifyAdmin()" class="w-full bg-tvred hover:bg-red-700 text-white font-bold py-2 rounded-lg text-sm transition">Đăng Nhập</button>
         </div>
     </div>
 
